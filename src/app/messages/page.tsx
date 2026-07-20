@@ -18,14 +18,14 @@ export default async function MessagesInboxPage() {
   });
 
   const sorted = conversations
-    .filter((c) => c.messages.length > 0)
+    .filter((c: any) => c.messages.length > 0)
     .sort(
       (a, b) =>
         new Date(b.messages[0].createdAt).getTime() -
         new Date(a.messages[0].createdAt).getTime()
     )
     .map((c: any) => {
-      const other = c.participants.find((p) => p.userId !== user.id)?.user;
+      const other = c.participants.find((p: any) => p.userId !== user.id)?.user;
       const lastMessage = c.messages[0];
       return {
         id: c.id,

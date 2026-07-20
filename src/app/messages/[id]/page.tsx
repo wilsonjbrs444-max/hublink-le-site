@@ -29,7 +29,7 @@ export default async function ConversationPage({
   );
   if (!isParticipant) notFound();
 
-  const other = conversation.participants.find((p) => p.userId !== user.id)?.user;
+  const other = conversation.participants.find((p: any) => p.userId !== user.id)?.user;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">

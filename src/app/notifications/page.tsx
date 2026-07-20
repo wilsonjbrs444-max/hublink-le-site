@@ -78,7 +78,7 @@ export default async function NotificationsPage() {
     }
   }
 
-  const unreadCount = groups.filter((g) => !g.isRead).length;
+  const unreadCount = groups.filter((g: any) => !g.isRead).length;
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
