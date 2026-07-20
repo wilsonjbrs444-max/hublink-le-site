@@ -32,15 +32,15 @@ export async function POST(req: NextRequest) {
         passwordHash,
         roles: { create: { role: role || "client" } },
         // Crée automatiquement le profil spécifique associé au rôle choisi
-        ...(role === "freelance" && {
-          freelanceProfile: { create: {} },
-        }),
-        ...(role === "seller" && {
-          sellerProfile: { create: { shopName: `Boutique de ${fullName}` } },
-        }),
-        ...(role === "company" && {
-          companyProfile: { create: { companyName: fullName } },
-        }),
+        ...(role === "freelance"
+  ? { freelanceProfile: { create: {} } }
+  : {}),
+...(role === "seller"
+  ? { sellerProfile: { create: { shopName: Boutique de ${fullName} } } }
+  : {}),
+...(role === "company"
+  ? { companyProfile: { create: { companyName: fullName } } }
+  : {}),
       },
     });
 
