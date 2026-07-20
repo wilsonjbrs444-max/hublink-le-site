@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   ? { freelanceProfile: { create: {} } }
   : {}),
 ...(role === "seller"
-  ? { sellerProfile: { create: { shopName: Boutique de ${fullName} } } }
+  ? { sellerProfile: { create: { shopName: `Boutique de ${fullName}` } } }
   : {}),
 ...(role === "company"
   ? { companyProfile: { create: { companyName: fullName } } }
