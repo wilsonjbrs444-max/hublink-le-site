@@ -20,7 +20,7 @@ export default async function MessagesInboxPage() {
   const sorted = conversations
     .filter((c: any) => c.messages.length > 0)
     .sort(
-      (a, b) =>
+      (a: any, b: any) =>
         new Date(b.messages[0].createdAt).getTime() -
         new Date(a.messages[0].createdAt).getTime()
     )
