@@ -25,7 +25,7 @@ export default async function ConversationPage({
   if (!conversation) notFound();
 
   const isParticipant = conversation.participants.some(
-    (p) => p.userId === user.id
+    (p: any) => p.userId === user.id
   );
   if (!isParticipant) notFound();
 
