@@ -47,7 +47,7 @@ export default async function AdminMissionsPage() {
             </tr>
           </thead>
           <tbody>
-            {missions.map((m) => (
+            {missions.map((m: any) => (
               <tr key={m.id} className="border-b last:border-0">
                 <td className="px-4 py-3 font-medium">{m.title}</td>
                 <td className="px-4 py-3 text-gray-600">{m.client.fullName}</td>
