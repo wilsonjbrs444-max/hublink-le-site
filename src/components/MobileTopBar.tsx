@@ -7,7 +7,7 @@ export default async function MobileTopBar() {
 
   return (
     <header className="sticky top-0 z-20 flex items-center justify-between border-b bg-white px-4 py-3 lg:hidden">
-      <Logo variant="dark" size="sm" showTagline={false} />
+      <Logo variant="icon" showText={false} />
       <div className="flex items-center gap-3">
         <Link href="/support" className="text-lg" aria-label="Notifications">
           🔔
