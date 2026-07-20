@@ -26,7 +26,7 @@ export default async function CourseDetailPage({
       <p className="mt-2 text-gray-600">{course.description}</p>
 
       <div className="mt-8 space-y-4">
-        {course.lessons.map((lesson, i) => (
+        {course.lessons.map((lesson: any, i: any) => (
           <div key={lesson.id} className="rounded-lg border bg-white p-5">
             <p className="text-xs font-medium text-gray-400">
               Leçon {i + 1}

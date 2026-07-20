@@ -19,7 +19,7 @@ export default async function TrainingPage() {
             description: c.description,
             category: c.category,
             lessons: {
-              create: c.lessons.map((l, i) => ({
+              create: c.lessons.map((l: any, i: any) => ({
                 title: l.title,
                 content: l.content,
                 position: i,
