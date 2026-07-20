@@ -65,7 +65,7 @@ model FreelanceProfile {
   specialty                String?
   latitude                 Float?
   longitude                Float?
-  skills                   String
+  skills                   String @default("")
   yearsExperience          Int?
   hourlyRate               Float? 
   city                     String?
