@@ -47,7 +47,7 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-6xl px-4 py-16">
         <div className="grid gap-6 md:grid-cols-3">
-          {highlights.map((h) => (
+          {highlights.map((h: any) => (
             <Link
               key={h.href}
               href={h.href}

@@ -48,7 +48,7 @@ export default async function QuoteDetailPage({
           Réponses reçues ({quote.responses.length})
         </h2>
         <div className="mt-3 space-y-3">
-          {quote.responses.map((r) => (
+          {quote.responses.map((r: any) => (
             <div key={r.id} className="rounded-lg border bg-white p-4">
               {r.price && (
                 <p className="font-semibold text-hublink">

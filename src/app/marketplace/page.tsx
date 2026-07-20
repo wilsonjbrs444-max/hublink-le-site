@@ -60,7 +60,7 @@ export default async function MarketplacePage({
       </form>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {products.map((p) => {
+        {products.map((p: any) => {
           const images: string[] = p.images ? JSON.parse(p.images) : [];
           return (
             <div

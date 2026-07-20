@@ -88,7 +88,7 @@ export default async function NotificationsPage() {
       </div>
 
       <div className="mt-8 space-y-2">
-        {groups.map((g) => {
+        {groups.map((g: any) => {
           const Icon = typeIcon[g.type] || Bell;
           return (
             <NotificationItem

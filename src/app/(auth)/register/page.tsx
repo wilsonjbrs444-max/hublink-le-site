@@ -105,7 +105,7 @@ export default function RegisterPage() {
             value={form.role}
             onChange={(e) => setForm({ ...form, role: e.target.value })}
           >
-            {roles.map((r) => (
+            {roles.map((r: any) => (
               <option key={r.value} value={r.value}>
                 {r.label}
               </option>

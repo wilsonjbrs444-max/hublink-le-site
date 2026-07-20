@@ -136,7 +136,7 @@ export default async function ProfilePage({
           </h2>
           <div className="mt-3 rounded-lg border bg-white p-5">
             <div className="flex flex-wrap gap-2">
-              {skills.map((s) => (
+              {skills.map((s: any) => (
                 <span
                   key={s}
                   className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600"
@@ -187,7 +187,7 @@ export default async function ProfilePage({
             Produits en vente ({profileUser.sellerProfile.products.length})
           </h2>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {profileUser.sellerProfile.products.map((p) => {
+            {profileUser.sellerProfile.products.map((p: any) => {
               const images: string[] = p.images ? JSON.parse(p.images) : [];
               return (
                 <div key={p.id} className="overflow-hidden rounded-lg border bg-white">
@@ -218,7 +218,7 @@ export default async function ProfilePage({
             Missions publiées ({profileUser.missionsPosted.length})
           </h2>
           <div className="mt-3 space-y-2">
-            {profileUser.missionsPosted.map((m) => (
+            {profileUser.missionsPosted.map((m: any) => (
               <Link
                 key={m.id}
                 href={`/freelance/${m.id}`}

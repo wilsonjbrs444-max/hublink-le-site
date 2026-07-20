@@ -103,7 +103,7 @@ export default async function SearchPage({
             <User size={14} /> Personnes
           </h2>
           <div className="mt-2 space-y-2">
-            {people.map((p) => (
+            {people.map((p: any) => (
               <Link
                 key={p.id}
                 href={`/profile/${p.id}`}
@@ -129,7 +129,7 @@ export default async function SearchPage({
             <MapPin size={14} /> Techniciens
           </h2>
           <div className="mt-2 space-y-2">
-            {technicians.map((t) => (
+            {technicians.map((t: any) => (
               <Link
                 key={t.id}
                 href={`/profile/${t.user.id}`}
@@ -149,7 +149,7 @@ export default async function SearchPage({
             <Briefcase size={14} /> Missions
           </h2>
           <div className="mt-2 space-y-2">
-            {missions.map((m) => (
+            {missions.map((m: any) => (
               <Link
                 key={m.id}
                 href={`/freelance/${m.id}`}
@@ -169,7 +169,7 @@ export default async function SearchPage({
             <Wrench size={14} /> Services
           </h2>
           <div className="mt-2 space-y-2">
-            {services.map((s) => (
+            {services.map((s: any) => (
               <Link
                 key={s.id}
                 href={`/services/${s.slug}`}
@@ -189,7 +189,7 @@ export default async function SearchPage({
             <ShoppingCart size={14} /> Marketplace
           </h2>
           <div className="mt-2 space-y-2">
-            {products.map((p) => (
+            {products.map((p: any) => (
               <Link
                 key={p.id}
                 href={`/marketplace/${p.id}`}

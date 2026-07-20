@@ -31,7 +31,7 @@ export default async function ServicesPage() {
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {services.map((s) => (
+        {services.map((s: any) => (
           <ServiceCard
             key={s.id}
             slug={s.slug}

@@ -29,7 +29,7 @@ export default async function FreelanceListPage() {
       </div>
 
       <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {missions.map((m) => (
+        {missions.map((m: any) => (
           <MissionCard
             key={m.id}
             id={m.id}

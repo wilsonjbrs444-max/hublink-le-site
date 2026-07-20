@@ -20,7 +20,7 @@ export default async function TechniciansMapPage() {
     include: { user: true },
   });
 
-  const points = technicians.map((t) => ({
+  const points = technicians.map((t: any) => ({
     id: t.id,
     userId: t.user.id,
     fullName: t.user.fullName,

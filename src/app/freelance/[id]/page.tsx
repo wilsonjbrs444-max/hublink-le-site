@@ -111,7 +111,7 @@ export default async function MissionDetailPage({
           Offres reçues ({mission.offers.length})
         </h2>
         <div className="mt-3 space-y-3">
-          {mission.offers.map((offer) => (
+          {mission.offers.map((offer: any) => (
             <div
               key={offer.id}
               className="flex items-center justify-between rounded-lg border bg-white p-4"

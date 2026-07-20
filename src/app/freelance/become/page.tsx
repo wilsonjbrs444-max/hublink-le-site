@@ -61,7 +61,7 @@ export default function BecomeFreelancePage() {
       // 2. Complète le profil avec les infos du formulaire
       const skills = form.skillsInput
         .split(",")
-        .map((s) => s.trim())
+        .map((s: any) => s.trim())
         .filter(Boolean);
 
       const finalSpecialty =
@@ -110,7 +110,7 @@ export default function BecomeFreelancePage() {
             onChange={(e) => setForm({ ...form, specialty: e.target.value })}
           >
             <option value="">Sélectionner...</option>
-            {SPECIALTIES.map((s) => (
+            {SPECIALTIES.map((s: any) => (
               <option key={s} value={s}>
                 {s}
               </option>

@@ -45,7 +45,7 @@ export default async function TrainingPage() {
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {courses.map((c) => (
+        {courses.map((c: any) => (
           <Link
             key={c.id}
             href={`/training/${c.id}`}

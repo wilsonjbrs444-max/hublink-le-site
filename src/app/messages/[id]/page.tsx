@@ -52,7 +52,7 @@ export default async function ConversationPage({
         <ConversationThread
           conversationId={conversation.id}
           currentUserId={user.id}
-          initialMessages={conversation.messages.map((m) => ({
+          initialMessages={conversation.messages.map((m: any) => ({
             ...m,
             createdAt: m.createdAt.toISOString(),
           }))}

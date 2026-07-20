@@ -28,7 +28,7 @@ export default async function AdminSupportPage() {
       <h1 className="text-2xl font-bold">Tickets support ({tickets.length})</h1>
 
       <div className="mt-6 space-y-2">
-        {tickets.map((t) => (
+        {tickets.map((t: any) => (
           <div key={t.id} className="rounded-lg border bg-white p-4">
             <div className="flex items-start justify-between">
               <div>

@@ -61,7 +61,7 @@ export default async function AdminHomePage() {
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {stats.map((s) => (
+        {stats.map((s: any) => (
           <Link
             key={s.label}
             href={s.href}

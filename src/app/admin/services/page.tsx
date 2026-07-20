@@ -34,7 +34,7 @@ export default async function AdminServicesPage() {
       </div>
 
       <div className="mt-8 space-y-2">
-        {services.map((s) => (
+        {services.map((s: any) => (
           <div
             key={s.id}
             className={`flex items-center justify-between rounded-lg border bg-white p-4 ${

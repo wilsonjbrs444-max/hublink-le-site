@@ -31,7 +31,7 @@ export default async function AdminVerificationsPage() {
       </p>
 
       <div className="mt-8 space-y-3">
-        {pending.map((p) => (
+        {pending.map((p: any) => (
           <div key={p.id} className="rounded-lg border bg-white p-5">
             <p className="font-semibold">{p.user.fullName}</p>
             <div className="mt-2 space-y-1 text-sm">

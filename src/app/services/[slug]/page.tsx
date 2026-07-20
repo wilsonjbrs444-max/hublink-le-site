@@ -40,7 +40,7 @@ export default async function ServiceDetailPage({
 
       {service.gallery.length > 0 && (
         <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {service.gallery.map((img) => (
+          {service.gallery.map((img: any) => (
             <img
               key={img.id}
               src={img.imageUrl}

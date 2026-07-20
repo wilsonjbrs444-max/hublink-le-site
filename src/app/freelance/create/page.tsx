@@ -86,7 +86,7 @@ export default function CreateMissionPage() {
             onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
           >
             <option value="">Sélectionner...</option>
-            {categories.map((c) => (
+            {categories.map((c: any) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>

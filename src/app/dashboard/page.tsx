@@ -66,7 +66,7 @@ export default async function DashboardPage() {
           </Link>
         </div>
         <div className="mt-3 space-y-2">
-          {myMissions.map((m) => (
+          {myMissions.map((m: any) => (
             <Link
               key={m.id}
               href={`/freelance/${m.id}`}
@@ -96,7 +96,7 @@ export default async function DashboardPage() {
             Mes offres envoyées ({myOffers.length})
           </h2>
           <div className="mt-3 space-y-2">
-            {myOffers.map((o) => (
+            {myOffers.map((o: any) => (
               <Link
                 key={o.id}
                 href={`/freelance/${o.missionId}`}
@@ -138,7 +138,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
           <div className="mt-3 space-y-2">
-            {myProducts.map((p) => (
+            {myProducts.map((p: any) => (
               <Link
                 key={p.id}
                 href={`/marketplace/${p.id}`}

@@ -72,7 +72,7 @@ export default async function TechniciansPage({
       </form>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {technicians.map((t) => {
+        {technicians.map((t: any) => {
           const skills: string[] = t.skills ? JSON.parse(t.skills) : [];
           return (
             <Link
@@ -110,7 +110,7 @@ export default async function TechniciansPage({
 
               {skills.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1">
-                  {skills.slice(0, 3).map((s) => (
+                  {skills.slice(0, 3).map((s: any) => (
                     <span
                       key={s}
                       className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600"

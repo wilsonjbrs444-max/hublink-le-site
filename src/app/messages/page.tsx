@@ -24,7 +24,7 @@ export default async function MessagesInboxPage() {
         new Date(b.messages[0].createdAt).getTime() -
         new Date(a.messages[0].createdAt).getTime()
     )
-    .map((c) => {
+    .map((c: any) => {
       const other = c.participants.find((p) => p.userId !== user.id)?.user;
       const lastMessage = c.messages[0];
       return {

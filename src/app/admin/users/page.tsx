@@ -44,7 +44,7 @@ export default async function AdminUsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((u) => (
+            {users.map((u: any) => (
               <tr key={u.id} className="border-b last:border-0">
                 <td className="px-4 py-3 font-medium">
                   {u.fullName}
@@ -57,7 +57,7 @@ export default async function AdminUsersPage() {
                 <td className="px-4 py-3 text-gray-600">{u.email}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1">
-                    {u.roles.map((r) => (
+                    {u.roles.map((r: any) => (
                       <span
                         key={r.id}
                         className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600"

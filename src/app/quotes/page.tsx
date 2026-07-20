@@ -28,7 +28,7 @@ export default async function QuotesPage() {
       </div>
 
       <div className="mt-8 space-y-3">
-        {quotes.map((q) => (
+        {quotes.map((q: any) => (
           <Link
             key={q.id}
             href={`/quotes/${q.id}`}

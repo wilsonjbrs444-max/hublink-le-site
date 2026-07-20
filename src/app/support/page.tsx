@@ -43,7 +43,7 @@ export default async function SupportPage() {
       <section className="mt-8">
         <h2 className="font-semibold text-gray-900">Questions fréquentes</h2>
         <div className="mt-3 space-y-3">
-          {FAQ.map((item) => (
+          {FAQ.map((item: any) => (
             <details
               key={item.q}
               className="rounded-lg border bg-white p-4 open:shadow-sm"
@@ -65,7 +65,7 @@ export default async function SupportPage() {
             Mes tickets ({myTickets.length})
           </h2>
           <div className="mt-3 space-y-2">
-            {myTickets.map((t) => (
+            {myTickets.map((t: any) => (
               <div key={t.id} className="rounded-lg border bg-white p-4">
                 <div className="flex items-center justify-between">
                   <p className="font-medium">{t.subject}</p>

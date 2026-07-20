@@ -26,7 +26,7 @@ export default async function BlogPage() {
       </p>
 
       <div className="mt-8 space-y-4">
-        {posts.map((p) => (
+        {posts.map((p: any) => (
           <Link
             key={p.id}
             href={`/blog/${p.slug}`}
