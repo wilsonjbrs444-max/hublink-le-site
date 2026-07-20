@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gray-50 text-gray-900 font-body transition-colors duration-200;
+}
+
+h1, h2, h3, h4 {
+  @apply font-heading;
+}
+
+/* ============================================================
+   MODE SOMBRE
+   Redéfinit les classes Tailwind les plus utilisées dans l'app
+   avec des couleurs directes (pas de @apply croisés entre elles,
+   ça créerait des dépendances circulaires).
+   ============================================================ */
+html.dark body {
+  background-color: #030712;
+  color: #f3f4f6;
+}
+
+html.dark .bg-white {
+  background-color: #111827;
+}
+html.dark .bg-gray-50 {
+  background-color: #030712;
+}
+html.dark .bg-gray-100 {
+  background-color: #1f2937;
+}
+html.dark .bg-hublink-light {
+  background-color: rgb(37 99 235 / 0.15);
+}
+
+html.dark .text-gray-900 {
+  color: #f3f4f6;
+}
+html.dark .text-gray-800 {
+  color: #e5e7eb;
+}
+html.dark .text-gray-700 {
+  color: #d1d5db;
+}
+html.dark .text-gray-600 {
+  color: #9ca3af;
+}
+html.dark .text-gray-500 {
+  color: #9ca3af;
+}
+html.dark .text-gray-400 {
+  color: #6b7280;
+}
+
+html.dark .border,
+html.dark .border-t,
+html.dark .border-b,
+html.dark .border-l,
+html.dark .border-r {
+  border-color: rgb(255 255 255 / 0.1);
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #111827;
+  color: #f3f4f6;
+  border-color: #374151;
+}
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #6b7280;
+}

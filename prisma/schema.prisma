@@ -1,0 +1,361 @@
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================
+// COMPTES & RÔLES
+// ============================================================
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  phone        String?
+  passwordHash String
+  fullName     String
+  city         String?
+  country      String?
+  avatarUrl    String?
+  coverUrl     String?
+  bio          String?
+  isAdmin      Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  roles             UserRole[]
+  freelanceProfile  FreelanceProfile?
+  sellerProfile     SellerProfile?
+  companyProfile    CompanyProfile?
+  missionsPosted    Mission[]        @relation("ClientMissions")
+  reviewsWritten    Review[]         @relation("ReviewAuthor")
+  reviewsReceived   Review[]         @relation("ReviewTarget")
+  serviceRequests   ServiceRequest[]
+  supportTickets    SupportTicket[]
+  notifications     Notification[]
+  certificates      Certificate[]
+  following         Follow[] @relation("Following")
+  followers         Follow[] @relation("Followers")
+  conversations     ConversationParticipant[]
+  messagesSent      Message[]
+}
+
+model UserRole {
+  id          String   @id @default(uuid())
+  userId      String
+  role        String
+  activatedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, role])
+}
+
+
+// ============================================================
+// PROFILS SPÉCIFIQUES
+// ============================================================
+model FreelanceProfile {
+  id                       String   @id @default(uuid())
+  userId                   String   @unique
+  bio                      String?
+  specialty                String?
+  latitude                 Float?
+  longitude                Float?
+  skills                   String
+  yearsExperience          Int?
+  hourlyRate               Float? 
+  city                     String?
+  availability             String   @default("disponible")
+  certificationStatus      String   @default("non_verifie") // non_verifie / en_attente / certifie / rejete
+  cniDocumentUrl           String?
+  diplomaDocumentUrl       String?
+  certificateDocumentUrl   String?
+  ratingAvg                Float  @default(0) 
+  ratingCount              Int      @default(0)
+  createdAt                DateTime @default(now())
+
+  user   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  offers MissionOffer[]
+}
+
+model SellerProfile {
+  id               String   @id @default(uuid())
+  userId           String   @unique
+  shopName         String
+  shopDescription  String?
+  shopLogoUrl      String?
+  isVerified       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products Product[]
+}
+
+model CompanyProfile {
+  id                 String   @id @default(uuid())
+  userId             String   @unique
+  companyName        String
+  registrationNumber String?
+  industry           String?
+  createdAt          DateTime @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quoteRequests QuoteRequest[]
+}
+
+// ============================================================
+// VITRINE SERVICES HUBLINK
+// ============================================================
+model Service {
+  id               String   @id @default(uuid())
+  title            String
+  slug             String   @unique
+  icon             String?
+  description      String?
+  priceIndicative  String?
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  gallery  ServiceGalleryImage[]
+  requests ServiceRequest[]
+}
+
+model ServiceGalleryImage {
+  id        String  @id @default(uuid())
+  serviceId String
+  imageUrl  String
+  caption   String?
+  service   Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+}
+
+model ServiceRequest {
+  id        String   @id @default(uuid())
+  serviceId String
+  userId    String
+  message   String?
+  status    String   @default("nouveau")
+  createdAt DateTime @default(now())
+
+  service Service @relation(fields: [serviceId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+}
+
+// ============================================================
+// HUBLINK FREELANCE — missions & offres
+// ============================================================
+model MissionCategory {
+  id   String @id @default(uuid())
+  name String @unique
+
+  missions Mission[]
+}
+
+model Mission {
+  id          String   @id @default(uuid())
+  clientId    String
+  categoryId  String?
+  title       String
+  description String
+  budget      Float? 
+  city        String?
+  urgency     String   @default("flexible") // aujourd_hui / cette_semaine / flexible
+  status      String   @default("ouverte")  // ouverte / attribuee / en_cours / terminee / annulee
+  createdAt   DateTime @default(now())
+
+  client   User              @relation("ClientMissions", fields: [clientId], references: [id])
+  category MissionCategory?  @relation(fields: [categoryId], references: [id])
+  offers   MissionOffer[]
+  reviews  Review[]
+}
+
+model MissionOffer {
+  id           String   @id @default(uuid())
+  missionId    String
+  freelanceId  String
+  price        Float  
+  message      String?
+  status       String   @default("en_attente") // en_attente / acceptee / refusee
+  createdAt    DateTime @default(now())
+
+  mission   Mission          @relation(fields: [missionId], references: [id], onDelete: Cascade)
+  freelance FreelanceProfile @relation(fields: [freelanceId], references: [id])
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  missionId    String?
+  reviewerId   String
+  targetUserId String
+  rating       Int
+  comment      String?
+  createdAt    DateTime @default(now())
+
+  mission    Mission? @relation(fields: [missionId], references: [id])
+  reviewer   User     @relation("ReviewAuthor", fields: [reviewerId], references: [id])
+  targetUser User     @relation("ReviewTarget", fields: [targetUserId], references: [id])
+}
+
+// ============================================================
+// MARKETPLACE
+// ============================================================
+model ProductCategory {
+  id       String    @id @default(uuid())
+  name     String    @unique
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  sellerId    String
+  categoryId  String?
+  name        String
+  description String?
+  price       Float  
+  stock       Int      @default(0)
+  images      String
+  isActive    Boolean  @default(true)
+  isSold      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  seller   SellerProfile     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category ProductCategory?  @relation(fields: [categoryId], references: [id])
+}
+
+// ============================================================
+// DEVIS B2B
+// ============================================================
+model QuoteRequest {
+  id          String   @id @default(uuid())
+  companyId   String
+  title       String?
+  description String
+  status      String   @default("ouverte")
+  createdAt   DateTime @default(now())
+
+  company   CompanyProfile   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  responses QuoteResponse[]
+}
+
+model QuoteResponse {
+  id             String   @id @default(uuid())
+  quoteRequestId String
+  partnerId      String
+  price          Float? 
+  message        String?
+  createdAt      DateTime @default(now())
+
+  quoteRequest QuoteRequest @relation(fields: [quoteRequestId], references: [id], onDelete: Cascade)
+}
+
+// ============================================================
+// SUPPORT
+// ============================================================
+model SupportTicket {
+  id          String   @id @default(uuid())
+  userId      String
+  subject     String
+  description String?
+  status      String   @default("ouvert")
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ============================================================
+// NOTIFICATIONS
+// ============================================================
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  content   String?
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model BlogPost {
+  id            String   @id @default(uuid())
+  title         String
+  slug          String   @unique
+  content       String
+  category      String?
+  authorName    String   @default("Équipe HUBLINK")
+  coverImageUrl String?
+  publishedAt   DateTime @default(now())
+}
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  category    String?
+  isFree      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  lessons Lesson[]
+}
+
+model Lesson {
+  id       String @id @default(uuid())
+  courseId String
+  title    String
+  content  String?
+  position Int    @default(0)
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+}
+
+model Certificate {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  issuedAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Follow {
+  id          String   @id @default(uuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+model Conversation {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  participants ConversationParticipant[]
+  messages     Message[]
+}
+
+model ConversationParticipant {
+  id             String @id @default(uuid())
+  conversationId String
+  userId         String
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id             String    @id @default(uuid())
+  conversationId String
+  senderId       String
+  content        String
+  createdAt      DateTime  @default(now())
+  readAt         DateTime?
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User          @relation(fields: [senderId], references: [id])
+}
