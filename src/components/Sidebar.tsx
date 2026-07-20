@@ -20,7 +20,7 @@ export default async function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-[#0B1230] lg:flex">
       <div className="px-5 py-6">
-        <Logo variant="light" size="sm" />
+        <Logo variant="icon" />
       </div>
 
       <nav className="flex-1 space-y-1 overflow-y-auto px-3">
