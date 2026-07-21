@@ -34,12 +34,14 @@ export default async function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur dark:bg-gray-950/90">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4">
-        <Logo variant="icon" showText={false} />
+        <div className="scale-90 sm:scale-100">
+  <Logo variant="icon" showText={false} />
+</div>
 
-        <nav className="flex items-center gap-0.5 overflow-x-auto sm:gap-1">
+        <nav className="flex origin-left scale-90 items-center gap-px overflow-x-auto sm:scale-100 sm:gap-1">
           <Link
             href="/search"
-            className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14"
+            className="flex w-9 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14 sm:px-0"
           >
             <Search size={19} strokeWidth={2} />
             <span className="hidden text-[10px] font-medium leading-none sm:inline">Recherche</span>
@@ -48,7 +50,7 @@ export default async function Navbar() {
             <Link
               key={l.href}
               href={l.href}
-              className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14"
+              className="flex w-9 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14 sm:px-0"
             >
               <l.Icon size={19} strokeWidth={2} />
               <span className="hidden text-[10px] font-medium leading-none sm:inline">{l.label}</span>
@@ -57,7 +59,7 @@ export default async function Navbar() {
           {user && (
             <Link
               href="/dashboard"
-              className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14"
+              className="flex w-9 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14 sm:px-0"
             >
               <LayoutDashboard size={19} strokeWidth={2} />
               <span className="hidden text-[10px] font-medium leading-none sm:inline">Tableau</span>
@@ -66,7 +68,7 @@ export default async function Navbar() {
           {user?.isAdmin && (
             <Link
               href="/admin"
-              className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-purple-600 transition hover:bg-purple-50 dark:hover:bg-purple-500/10 sm:w-14"
+              className="flex w-9 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-purple-600 transition hover:bg-purple-50 dark:hover:bg-purple-500/10 sm:w-14 sm:px-0"
             >
               <ShieldCheck size={19} strokeWidth={2} />
               <span className="hidden text-[10px] font-medium leading-none sm:inline">Admin</span>
