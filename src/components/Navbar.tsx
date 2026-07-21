@@ -42,7 +42,7 @@ export default async function Navbar() {
             className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14"
           >
             <Search size={19} strokeWidth={2} />
-            <span className="text-[10px] font-medium leading-none">Recherche</span>
+            <span className="hidden text-[10px] font-medium leading-none sm:inline">Recherche</span>
           </Link>
           {links.map((l) => (
             <Link
@@ -51,7 +51,7 @@ export default async function Navbar() {
               className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14"
             >
               <l.Icon size={19} strokeWidth={2} />
-              <span className="text-[10px] font-medium leading-none">{l.label}</span>
+              <span className="hidden text-[10px] font-medium leading-none sm:inline">{l.label}</span>
             </Link>
           ))}
           {user && (
@@ -60,7 +60,7 @@ export default async function Navbar() {
               className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-gray-500 transition hover:bg-hublink-light hover:text-hublink dark:text-gray-400 sm:w-14"
             >
               <LayoutDashboard size={19} strokeWidth={2} />
-              <span className="text-[10px] font-medium leading-none">Tableau</span>
+              <span className="hidden text-[10px] font-medium leading-none sm:inline">Tableau</span>
             </Link>
           )}
           {user?.isAdmin && (
@@ -69,7 +69,7 @@ export default async function Navbar() {
               className="flex w-12 shrink-0 flex-col items-center gap-0.5 rounded-lg py-1.5 text-purple-600 transition hover:bg-purple-50 dark:hover:bg-purple-500/10 sm:w-14"
             >
               <ShieldCheck size={19} strokeWidth={2} />
-              <span className="text-[10px] font-medium leading-none">Admin</span>
+              <span className="hidden text-[10px] font-medium leading-none sm:inline">Admin</span>
             </Link>
           )}
         </nav>
