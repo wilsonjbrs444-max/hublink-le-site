@@ -3,6 +3,7 @@ import { Sora, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -53,11 +54,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="flex min-h-screen flex-col font-body">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+      <body className="flex min-h-screen flex-col font...">
+  <Navbar />
+  <main className="flex-1 pb-16 lg:pb-0">{children}</main>
+  <BottomNav />
+  <Footer />
+</body>
     </html>
   );
 }
