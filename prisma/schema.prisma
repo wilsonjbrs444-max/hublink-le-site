@@ -357,6 +357,7 @@ model Message {
   conversationId String
   senderId       String
   content        String
+  imageUrl       String?
   createdAt      DateTime  @default(now())
   readAt         DateTime?
 

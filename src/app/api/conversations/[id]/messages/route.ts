@@ -44,15 +44,15 @@ export async function POST(
       return NextResponse.json({ error: "Accès refusé." }, { status: 403 });
     }
 
-    const { content } = await req.json();
-    if (!content?.trim()) {
-      return NextResponse.json({ error: "Message vide." }, { status: 400 });
-    }
+    const { content, imageUrl } = await req.json();
+if (!content?.trim() && !imageUrl) {
+  return NextResponse.json({ error: "Message vide." }, { status: 400 });
+}
 
-    const message = await prisma.message.create({
-      data: { conversationId: params.id, senderId: user.id, content },
-      include: { sender: true },
-    });
+const message = await prisma.message.create({
+  data: { conversationId: params.id, senderId: user.id, content: content || "", imageUrl },
+  include: { sender: true },
+});
 
     const others = await prisma.conversationParticipant.findMany({
       where: { conversationId: params.id, userId: { not: user.id } },
