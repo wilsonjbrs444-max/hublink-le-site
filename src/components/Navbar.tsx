@@ -35,6 +35,7 @@ export default async function Navbar() {
     <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur dark:bg-gray-950/90">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4">
         <div className="scale-90 sm:scale-100">
+  <div className="scale-90 sm:scale-100">
   <Logo variant="icon" showText={false} />
 </div>
 
