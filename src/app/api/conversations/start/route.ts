@@ -14,6 +14,21 @@ export async function POST(req: NextRequest) {
     if (!targetUserId || targetUserId === user.id) {
       return NextResponse.json({ error: "Destinataire invalide." }, { status: 400 });
     }
+const [followsTarget, targetFollowsUser] = await Promise.all([
+  prisma.follow.findUnique({
+    where: { followerId_followingId: { followerId: user.id, followingId: targetUserId } },
+  }),
+  prisma.follow.findUnique({
+    where: { followerId_followingId: { followerId: targetUserId, followingId: user.id } },
+  }),
+]);
+
+if (!followsTarget || !targetFollowsUser) {
+  return NextResponse.json(
+    { error: "Vous devez vous suivre mutuellement pour envoyer un message." },
+    { status: 403 }
+  );
+}
 
     // Cherche une conversation 1:1 déjà existante entre les deux
     const existing = await prisma.conversation.findFirst({
