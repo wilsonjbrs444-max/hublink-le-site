@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import FollowButton from "@/components/FollowButton";
+import MessageButton from "@/components/MessageButton";
 import { MapPin, BadgeCheck, Star, Monitor, Phone, Mail } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -109,11 +110,14 @@ export default async function ProfilePage({
           </div>
         )}
         {!isOwnProfile && currentUser && (
-          <FollowButton
-            targetUserId={profileUser.id}
-            initialFollowing={isFollowing}
-          />
-        )}
+  <div className="flex gap-2">
+    <FollowButton
+      targetUserId={profileUser.id}
+      initialFollowing={isFollowing}
+    />
+    {isFollowing && <MessageButton targetUserId={profileUser.id} />}
+  </div>
+)}
         {!currentUser && (
           <Link
             href="/login"
