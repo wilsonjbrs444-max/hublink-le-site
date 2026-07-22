@@ -14,18 +14,13 @@ export async function POST(req: NextRequest) {
     if (!targetUserId || targetUserId === user.id) {
       return NextResponse.json({ error: "Destinataire invalide." }, { status: 400 });
     }
-const [followsTarget, targetFollowsUser] = await Promise.all([
-  prisma.follow.findUnique({
-    where: { followerId_followingId: { followerId: user.id, followingId: targetUserId } },
-  }),
-  prisma.follow.findUnique({
-    where: { followerId_followingId: { followerId: targetUserId, followingId: user.id } },
-  }),
-]);
+const followsTarget = await prisma.follow.findUnique({
+  where: { followerId_followingId: { followerId: user.id, followingId: targetUserId } },
+});
 
-if (!followsTarget || !targetFollowsUser) {
+if (!followsTarget) {
   return NextResponse.json(
-    { error: "Vous devez vous suivre mutuellement pour envoyer un message." },
+    { error: "Abonnez-vous à ce compte pour lui envoyer un message." },
     { status: 403 }
   );
 }
