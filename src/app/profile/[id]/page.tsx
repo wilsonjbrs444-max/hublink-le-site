@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import FollowButton from "@/components/FollowButton";
 import MessageButton from "@/components/MessageButton";
+import OnlineDot from "@/components/OnlineDot";
+import { isEffectivelyOnline } from "@/lib/presence";
 import { MapPin, BadgeCheck, Star, Monitor, Phone, Mail } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -56,17 +58,29 @@ export default async function ProfilePage({
             />
           )}
         </div>
-        <div className="absolute -bottom-10 left-6 h-24 w-24 overflow-hidden rounded-full border-4 border-white bg-hublink-light shadow-sm sm:h-28 sm:w-28">
-          {profileUser.avatarUrl ? (
-            <img
-              src={profileUser.avatarUrl}
-              alt=""
-              className="h-full w-full object-cover"
+        <div className="absolute -bottom-10 left-6 h-24 w-24 rounded-full border-4 border-white bg-hublink-light shadow-sm sm:h-28 sm:w-28">
+          <div className="h-full w-full overflow-hidden rounded-full">
+            {profileUser.avatarUrl ? (
+              <img
+                src={profileUser.avatarUrl}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-hublink">
+                {profileUser.fullName.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </div>
+          {!isOwnProfile && (
+            <OnlineDot
+              userId={profileUser.id}
+              initialOnline={isEffectivelyOnline(
+                profileUser.isOnline,
+                profileUser.lastActiveAt
+              )}
+              size="lg"
             />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-3xl font-semibold text-hublink">
-              {profileUser.fullName.charAt(0).toUpperCase()}
-            </div>
           )}
         </div>
       </div>

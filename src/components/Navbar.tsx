@@ -3,6 +3,7 @@ import { Bell, Search, ShieldCheck } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import Logo from "./Logo";
 import { getCurrentUser } from "@/lib/currentUser";
+import PresenceHeartbeat from "./PresenceHeartbeat";
 
 export default async function Navbar() {
   const user = await getCurrentUser();
@@ -14,6 +15,7 @@ export default async function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur dark:bg-gray-950/90">
+      {user && <PresenceHeartbeat />}
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-3 py-2.5 sm:px-4">
         <Logo variant="icon" showText={false} />
 

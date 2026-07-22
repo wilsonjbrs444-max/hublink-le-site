@@ -23,6 +23,7 @@ type Technician = {
   city: string | null;
   latitude: number;
   longitude: number;
+  isOnline: boolean;
 };
 
 export default function TechniciansMap({
@@ -54,6 +55,16 @@ export default function TechniciansMap({
               <p className="font-semibold">{t.fullName}</p>
               <p className="text-hublink">{t.specialty}</p>
               <p className="text-gray-500">{t.city}</p>
+              <p className="mt-1 flex items-center gap-1.5">
+                <span
+                  className={`inline-block h-2 w-2 rounded-full ${
+                    t.isOnline ? "bg-green-500" : "bg-gray-300"
+                  }`}
+                />
+                <span className={t.isOnline ? "text-green-600" : "text-gray-400"}>
+                  {t.isOnline ? "En ligne" : "Hors ligne"}
+                </span>
+              </p>
               <Link
                 href={`/profile/${t.userId}`}
                 className="mt-1 block text-hublink underline"

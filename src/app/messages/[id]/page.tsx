@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import ConversationThread from "@/components/ConversationThread";
+import OnlineDot from "@/components/OnlineDot";
+import { isEffectivelyOnline } from "@/lib/presence";
 
 export const dynamic = "force-dynamic";
 
@@ -39,8 +41,15 @@ export default async function ConversationPage({
 
       {other && (
         <div className="mt-3 flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-hublink-light text-sm font-semibold text-hublink">
-            {other.fullName.charAt(0).toUpperCase()}
+          <div className="relative h-9 w-9">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-hublink-light text-sm font-semibold text-hublink">
+              {other.fullName.charAt(0).toUpperCase()}
+            </div>
+            <OnlineDot
+              userId={other.id}
+              initialOnline={isEffectivelyOnline(other.isOnline, other.lastActiveAt)}
+              size="sm"
+            />
           </div>
           <Link href={`/profile/${other.id}`} className="font-semibold hover:underline">
             {other.fullName}

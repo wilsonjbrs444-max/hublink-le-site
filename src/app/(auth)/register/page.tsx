@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -123,6 +124,13 @@ export default function RegisterPage() {
           {loading ? "Création..." : "Créer mon compte"}
         </button>
       </form>
+
+      <p className="mt-6 text-center text-sm text-gray-600">
+        Déjà un compte ?{" "}
+        <Link href="/login" className="font-semibold text-hublink hover:underline">
+          Se connecter
+        </Link>
+      </p>
     </div>
   );
 }

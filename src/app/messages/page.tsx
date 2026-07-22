@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import ConversationSearch from "@/components/ConversationSearch";
+import { isEffectivelyOnline } from "@/lib/presence";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +32,9 @@ export default async function MessagesInboxPage() {
         id: c.id,
         otherName: other?.fullName || "Utilisateur",
         otherId: other?.id || "",
+        otherOnline: other
+          ? isEffectivelyOnline(other.isOnline, other.lastActiveAt)
+          : false,
         lastMessage: lastMessage.content,
         isMine: lastMessage.senderId === user.id,
         createdAt: lastMessage.createdAt.toISOString(),

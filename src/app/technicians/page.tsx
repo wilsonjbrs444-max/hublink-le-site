@@ -1,6 +1,8 @@
 import Link from "next/link";
-import { MapPin, BadgeCheck, Star, Search, Map } from "lucide-react";
+import { MapPin, Search, Map } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import TechniciansGrid from "@/components/TechniciansGrid";
+import { isEffectivelyOnline } from "@/lib/presence";
 
 export const dynamic = "force-dynamic";
 
@@ -71,80 +73,24 @@ export default async function TechniciansPage({
         </button>
       </form>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {technicians.map((t: any) => {
-          const skills: string[] = t.skills ? JSON.parse(t.skills) : [];
-          return (
-            <Link
-              href={`/profile/${t.user.id}`}
-              key={t.id}
-              className="block rounded-lg border bg-white p-5 shadow-sm hover:shadow-md"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-hublink-light text-lg font-semibold text-hublink">
-                  {t.user.avatarUrl ? (
-                    <img src={t.user.avatarUrl} alt="" className="h-full w-full object-cover" />
-                  ) : (
-                    t.user.fullName.charAt(0).toUpperCase()
-                  )}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">{t.user.fullName}</p>
-                  <p className="text-xs font-medium text-hublink">
-                    {t.specialty || "Technicien"}
-                  </p>
-                  <p className="flex items-center gap-1 text-xs text-gray-500">
-                    <MapPin size={12} /> {t.city || "Ville non précisée"}
-                  </p>
-                </div>
-                {t.certificationStatus === "certifie" && (
-                  <span className="ml-auto flex items-center gap-1 rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700">
-                    <BadgeCheck size={13} /> Certifié
-                  </span>
-                )}
-              </div>
-
-              {t.bio && (
-                <p className="mt-3 line-clamp-2 text-sm text-gray-600">{t.bio}</p>
-              )}
-
-              {skills.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1">
-                  {skills.slice(0, 3).map((s: any) => (
-                    <span
-                      key={s}
-                      className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="mt-4 flex items-center justify-between text-sm">
-                <span className="flex items-center gap-1 text-gray-500">
-                  <Star size={14} className="fill-amber-400 text-amber-400" />
-                  {Number(t.ratingAvg).toFixed(1)} ({t.ratingCount})
-                </span>
-                <span className="text-gray-500">
-                  {t.yearsExperience || 0} ans d'expérience
-                </span>
-              </div>
-
-              {t.hourlyRate && (
-                <p className="mt-2 text-sm font-semibold text-hublink">
-                  {Number(t.hourlyRate).toLocaleString("fr-FR")} FCFA / heure
-                </p>
-              )}
-            </Link>
-          );
-        })}
-        {technicians.length === 0 && (
-          <p className="text-sm text-gray-500">
-            Aucun technicien ne correspond à ta recherche.
-          </p>
-        )}
-      </div>
+      <TechniciansGrid
+        technicians={technicians.map((t: any) => ({
+          id: t.id,
+          userId: t.user.id,
+          fullName: t.user.fullName,
+          avatarUrl: t.user.avatarUrl,
+          specialty: t.specialty,
+          city: t.city,
+          bio: t.bio,
+          skills: t.skills ? JSON.parse(t.skills) : [],
+          certificationStatus: t.certificationStatus,
+          ratingAvg: t.ratingAvg,
+          ratingCount: t.ratingCount,
+          yearsExperience: t.yearsExperience,
+          hourlyRate: t.hourlyRate,
+          isOnline: isEffectivelyOnline(t.user.isOnline, t.user.lastActiveAt),
+        }))}
+      />
     </div>
   );
 }

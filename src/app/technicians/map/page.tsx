@@ -2,6 +2,7 @@ import Link from "next/link";
 import nextDynamic from "next/dynamic";
 import { List } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { isEffectivelyOnline } from "@/lib/presence";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,7 @@ export default async function TechniciansMapPage() {
     city: t.city,
     latitude: t.latitude as number,
     longitude: t.longitude as number,
+    isOnline: isEffectivelyOnline(t.user.isOnline, t.user.lastActiveAt),
   }));
 
   return (
