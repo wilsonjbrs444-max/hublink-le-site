@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import { createNotification } from "@/lib/notify";
+import { sendPushToUser } from "@/lib/push";
 
 async function assertParticipant(userId: string, conversationId: string) {
   const participant = await prisma.conversationParticipant.findUnique({
@@ -23,7 +24,10 @@ export async function GET(
   }
 
   const messages = await prisma.message.findMany({
-    where: { conversationId: params.id },
+    where: {
+      conversationId: params.id,
+      deletions: { none: { userId: user.id } },
+    },
     orderBy: { createdAt: "asc" },
     include: { sender: true },
   });
@@ -73,6 +77,11 @@ const message = await prisma.message.create({
         `${user.fullName} : ${content.slice(0, 60)}`,
         `/messages/${params.id}`
       );
+      await sendPushToUser(p.userId, {
+        title: user.fullName,
+        body: content.slice(0, 120) || "📷 Photo",
+        url: `/messages/${params.id}`,
+      });
     }
 
     return NextResponse.json({ message });

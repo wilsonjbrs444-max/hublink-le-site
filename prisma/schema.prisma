@@ -44,6 +44,8 @@ model User {
   followers         Follow[] @relation("Followers")
   conversations     ConversationParticipant[]
   messagesSent      Message[]
+  pushSubscriptions PushSubscription[]
+  messageDeletions  MessageDeletion[]
 }
 
 model UserRole {
@@ -355,14 +357,39 @@ model ConversationParticipant {
 }
 
 model Message {
-  id             String    @id @default(uuid())
-  conversationId String
-  senderId       String
-  content        String
-  imageUrl       String?
-  createdAt      DateTime  @default(now())
-  readAt         DateTime?
+  id                 String    @id @default(uuid())
+  conversationId     String
+  senderId           String
+  content            String
+  imageUrl           String?
+  createdAt          DateTime  @default(now())
+  readAt             DateTime?
+  deletedForEveryone Boolean   @default(false)
 
-  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender       User          @relation(fields: [senderId], references: [id])
+  conversation Conversation      @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User              @relation(fields: [senderId], references: [id])
+  deletions    MessageDeletion[]
+}
+
+model MessageDeletion {
+  id        String   @id @default(uuid())
+  messageId String
+  userId    String
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+}
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

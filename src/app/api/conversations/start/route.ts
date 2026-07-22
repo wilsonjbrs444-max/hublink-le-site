@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import { createNotification } from "@/lib/notify";
+import { sendPushToUser } from "@/lib/push";
 
 export async function POST(req: NextRequest) {
   try {
@@ -14,16 +15,9 @@ export async function POST(req: NextRequest) {
     if (!targetUserId || targetUserId === user.id) {
       return NextResponse.json({ error: "Destinataire invalide." }, { status: 400 });
     }
-const followsTarget = await prisma.follow.findUnique({
-  where: { followerId_followingId: { followerId: user.id, followingId: targetUserId } },
-});
-
-if (!followsTarget) {
-  return NextResponse.json(
-    { error: "Abonnez-vous à ce compte pour lui envoyer un message." },
-    { status: 403 }
-  );
-}
+    // Note : on autorise l'envoi de message à n'importe quel utilisateur,
+    // pas seulement aux comptes suivis (ex: contacter un vendeur depuis
+    // une annonce marketplace, un freelance depuis une mission, etc.)
 
     // Cherche une conversation 1:1 déjà existante entre les deux
     const existing = await prisma.conversation.findFirst({
@@ -62,6 +56,11 @@ if (!followsTarget) {
         `${user.fullName} : ${initialMessage.slice(0, 60)}`,
         `/messages/${conversationId}`
       );
+      await sendPushToUser(targetUserId, {
+        title: user.fullName,
+        body: initialMessage.slice(0, 120),
+        url: `/messages/${conversationId}`,
+      });
     }
 
     return NextResponse.json({ conversationId });

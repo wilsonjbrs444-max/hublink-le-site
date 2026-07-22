@@ -28,6 +28,7 @@ export default async function MessagesInboxPage() {
     .map((c: any) => {
       const other = c.participants.find((p: any) => p.userId !== user.id)?.user;
       const lastMessage = c.messages[0];
+      const isMine = lastMessage.senderId === user.id;
       return {
         id: c.id,
         otherName: other?.fullName || "Utilisateur",
@@ -36,7 +37,8 @@ export default async function MessagesInboxPage() {
           ? isEffectivelyOnline(other.isOnline, other.lastActiveAt)
           : false,
         lastMessage: lastMessage.content,
-        isMine: lastMessage.senderId === user.id,
+        isMine,
+        unread: !isMine && !lastMessage.readAt,
         createdAt: lastMessage.createdAt.toISOString(),
       };
     });

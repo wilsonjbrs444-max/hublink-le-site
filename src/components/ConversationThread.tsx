@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
+import { MoreVertical } from "lucide-react";
 
 type Message = {
   id: string;
@@ -10,6 +10,7 @@ type Message = {
   senderId: string;
   createdAt: string;
   readAt?: string | null;
+  deletedForEveryone?: boolean;
   sender: { fullName: string };
 };
 
@@ -27,12 +28,24 @@ export default function ConversationThread({
   const [sending, setSending] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setOpenMenuId(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -86,6 +99,36 @@ export default function ConversationThread({
     }
   }
 
+  async function handleDelete(messageId: string, scope: "me" | "everyone") {
+    setOpenMenuId(null);
+    try {
+      const res = await fetch(`/api/messages/${messageId}/delete`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ scope }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Impossible de supprimer ce message.");
+        return;
+      }
+
+      if (scope === "me") {
+        setMessages((prev) => prev.filter((m) => m.id !== messageId));
+      } else {
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === messageId
+              ? { ...m, content: "", imageUrl: null, deletedForEveryone: true }
+              : m
+          )
+        );
+      }
+    } catch {
+      alert("Erreur réseau, réessaie.");
+    }
+  }
+
   return (
     <div className="flex h-[70vh] flex-col rounded-lg border bg-white">
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
@@ -93,36 +136,91 @@ export default function ConversationThread({
           const isMine = m.senderId === currentUserId;
           return (
             <div key={m.id} className={`flex ${isMine ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
-                  isMine ? "bg-hublink text-white" : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                {m.imageUrl && (
-                  <a href={m.imageUrl} target="_blank" rel="noopener noreferrer">
-                    <img
-                      src={m.imageUrl}
-                      alt="Photo envoyée"
-                      className="mb-1 max-h-64 rounded-md object-cover"
-                    />
-                  </a>
-                )}
-                {m.content && <span>{m.content}</span>}
+              <div className="group relative max-w-[75%]">
                 <div
-                  className={`mt-1 flex items-center gap-1 text-[10px] ${
-                    isMine ? "text-blue-100" : "text-gray-400"
+                  className={`rounded-lg px-3 py-2 text-sm ${
+                    m.deletedForEveryone
+                      ? "border border-dashed border-gray-300 bg-gray-50 italic text-gray-400"
+                      : isMine
+                      ? "bg-hublink text-white"
+                      : "bg-gray-100 text-gray-800"
                   }`}
                 >
-                  {new Date(m.createdAt).toLocaleTimeString("fr-FR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                  {isMine && (
-                    <span className={m.readAt ? "text-blue-300" : ""}>
-                      {m.readAt ? "✓✓" : "✓"}
-                    </span>
+                  {m.deletedForEveryone ? (
+                    <span>🚫 Message supprimé</span>
+                  ) : (
+                    <>
+                      {m.imageUrl && (
+                        <a href={m.imageUrl} target="_blank" rel="noopener noreferrer">
+                          <img
+                            src={m.imageUrl}
+                            alt="Photo envoyée"
+                            className="mb-1 max-h-64 rounded-md object-cover"
+                          />
+                        </a>
+                      )}
+                      {m.content && <span>{m.content}</span>}
+                    </>
                   )}
+                  <div
+                    className={`mt-1 flex items-center gap-1 text-[10px] ${
+                      m.deletedForEveryone
+                        ? "text-gray-400"
+                        : isMine
+                        ? "text-blue-100"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {new Date(m.createdAt).toLocaleTimeString("fr-FR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                    {isMine && !m.deletedForEveryone && (
+                      <span className={m.readAt ? "text-blue-300" : ""}>
+                        {m.readAt ? "✓✓" : "✓"}
+                      </span>
+                    )}
+                  </div>
                 </div>
+
+                {!m.deletedForEveryone && (
+                  <button
+                    type="button"
+                    onClick={() => setOpenMenuId(openMenuId === m.id ? null : m.id)}
+                    className={`absolute top-0 flex h-6 w-6 items-center justify-center rounded-full bg-white text-gray-500 opacity-0 shadow group-hover:opacity-100 ${
+                      isMine ? "-left-7" : "-right-7"
+                    }`}
+                    aria-label="Options du message"
+                  >
+                    <MoreVertical size={14} />
+                  </button>
+                )}
+
+                {openMenuId === m.id && (
+                  <div
+                    ref={menuRef}
+                    className={`absolute z-10 mt-1 w-52 rounded-md border bg-white py-1 text-sm shadow-lg ${
+                      isMine ? "right-0" : "left-0"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(m.id, "me")}
+                      className="block w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50"
+                    >
+                      Supprimer pour moi
+                    </button>
+                    {isMine && (
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(m.id, "everyone")}
+                        className="block w-full px-3 py-2 text-left text-red-600 hover:bg-red-50"
+                      >
+                        Supprimer pour tout le monde
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           );
