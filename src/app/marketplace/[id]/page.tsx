@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/currentUser";
 import MessageSellerButton from "@/components/MessageSellerButton";
 import ProductOwnerActions from "@/components/ProductOwnerActions";
+import FavoriteButton from "@/components/FavoriteButton";
 import { Monitor } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -23,6 +24,17 @@ export default async function ProductDetailPage({
   const currentUser = await getCurrentUser();
   const isOwner = currentUser?.id === product.seller.userId;
   const images: string[] = product.images ? JSON.parse(product.images) : [];
+  const isFavorited = currentUser
+    ? !!(await prisma.favorite.findUnique({
+        where: {
+          userId_targetType_targetId: {
+            userId: currentUser.id,
+            targetType: "product",
+            targetId: product.id,
+          },
+        },
+      }))
+    : false;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -59,7 +71,7 @@ export default async function ProductDetailPage({
           </p>
           <p className="mt-1 text-xs text-gray-400">Stock : {product.stock}</p>
 
-          <div className="mt-6">
+          <div className="mt-6 flex items-center gap-2">
             {isOwner ? (
               <ProductOwnerActions productId={product.id} isSold={product.isSold} />
             ) : (
@@ -70,6 +82,14 @@ export default async function ProductDetailPage({
                   label="Écrire au vendeur"
                 />
               )
+            )}
+            {!isOwner && (
+              <FavoriteButton
+                targetType="product"
+                targetId={product.id}
+                initialFavorited={isFavorited}
+                isLoggedIn={!!currentUser}
+              />
             )}
           </div>
         </div>

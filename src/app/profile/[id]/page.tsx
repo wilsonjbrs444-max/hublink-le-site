@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/currentUser";
 import FollowButton from "@/components/FollowButton";
 import MessageButton from "@/components/MessageButton";
 import OnlineDot from "@/components/OnlineDot";
+import FavoriteButton from "@/components/FavoriteButton";
 import { isEffectivelyOnline } from "@/lib/presence";
 import { MapPin, BadgeCheck, Star, Monitor, Phone, Mail } from "lucide-react";
 
@@ -53,6 +54,19 @@ export default async function ProfilePage({
         take: 20,
       })
     : [];
+
+  const isFavorited =
+    currentUser && profileUser.freelanceProfile
+      ? !!(await prisma.favorite.findUnique({
+          where: {
+            userId_targetType_targetId: {
+              userId: currentUser.id,
+              targetType: "technician",
+              targetId: profileUser.id,
+            },
+          },
+        }))
+      : false;
 
   return (
     <div className="mx-auto max-w-3xl px-4 pb-12">
@@ -144,6 +158,14 @@ export default async function ProfilePage({
       initialFollowing={isFollowing}
     />
     {isFollowing && <MessageButton targetUserId={profileUser.id} />}
+    {profileUser.freelanceProfile && (
+      <FavoriteButton
+        targetType="technician"
+        targetId={profileUser.id}
+        initialFavorited={isFavorited}
+        isLoggedIn={!!currentUser}
+      />
+    )}
   </div>
 )}
         {!currentUser && (

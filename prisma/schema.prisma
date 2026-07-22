@@ -46,6 +46,7 @@ model User {
   messagesSent      Message[]
   pushSubscriptions PushSubscription[]
   messageDeletions  MessageDeletion[]
+  favorites         Favorite[]
 }
 
 model UserRole {
@@ -394,4 +395,16 @@ model PushSubscription {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Favorite {
+  id         String   @id @default(uuid())
+  userId     String
+  targetType String   // "product" | "mission" | "technician"
+  targetId   String
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetType, targetId])
 }

@@ -1,16 +1,41 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { Wrench, Settings, LayoutDashboard, User as UserIcon } from "lucide-react";
+import { Wrench, Settings, LayoutDashboard, User as UserIcon, Heart } from "lucide-react";
 import { getCurrentUser } from "@/lib/currentUser";
 
 export const dynamic = "force-dynamic";
 
 export default async function MorePage() {
   const user = await getCurrentUser();
-  if (!user) redirect("/login");
+
+  if (!user) {
+    return (
+      <div className="mx-auto max-w-md px-4 py-16 text-center">
+        <h1 className="text-xl font-bold">Bienvenue sur HUBLINK</h1>
+        <p className="mt-2 text-sm text-gray-600">
+          Connecte-toi ou crée un compte pour accéder à ton profil, tes
+          messages et bien plus.
+        </p>
+        <div className="mt-6 flex flex-col gap-3">
+          <Link
+            href="/register"
+            className="rounded-md bg-hublink py-3 text-center font-semibold text-white hover:bg-hublink-dark"
+          >
+            Créer un compte
+          </Link>
+          <Link
+            href="/login"
+            className="rounded-md border border-hublink py-3 text-center font-semibold text-hublink hover:bg-hublink-light"
+          >
+            Se connecter
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const items = [
     { href: `/profile/${user.id}`, label: "Mon profil", Icon: UserIcon },
+    { href: "/favorites", label: "Mes favoris", Icon: Heart },
     { href: "/services", label: "Services", Icon: Wrench },
     { href: "/dashboard", label: "Tableau de bord", Icon: LayoutDashboard },
     { href: "/settings", label: "Paramètres", Icon: Settings },

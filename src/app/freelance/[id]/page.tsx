@@ -8,6 +8,7 @@ import MessageSellerButton from "@/components/MessageSellerButton";
 import DeleteMissionButton from "@/components/DeleteMissionButton";
 import CompleteMissionButton from "@/components/CompleteMissionButton";
 import ReviewForm from "@/components/ReviewForm";
+import FavoriteButton from "@/components/FavoriteButton";
 import { MapPin, Star, CheckCircle2 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -48,6 +49,17 @@ export default async function MissionDetailPage({
   const myReview = currentUser
     ? mission.reviews.find((r: any) => r.reviewerId === currentUser.id)
     : undefined;
+  const isFavorited = currentUser
+    ? !!(await prisma.favorite.findUnique({
+        where: {
+          userId_targetType_targetId: {
+            userId: currentUser.id,
+            targetType: "mission",
+            targetId: mission.id,
+          },
+        },
+      }))
+    : false;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -84,12 +96,18 @@ export default async function MissionDetailPage({
         </div>
 
         {currentUser && !isClient && (
-          <div className="mt-5">
+          <div className="mt-5 flex items-center gap-2">
             <MessageSellerButton
               targetUserId={mission.clientId}
               initialMessage={`Bonjour, je vous contacte au sujet de votre mission "${mission.title}".`}
               label="Contacter le client"
               fullWidth={false}
+            />
+            <FavoriteButton
+              targetType="mission"
+              targetId={mission.id}
+              initialFavorited={isFavorited}
+              isLoggedIn={!!currentUser}
             />
           </div>
         )}
