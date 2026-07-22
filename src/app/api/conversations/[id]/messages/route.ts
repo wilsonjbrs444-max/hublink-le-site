@@ -28,6 +28,15 @@ export async function GET(
     include: { sender: true },
   });
 
+  await prisma.message.updateMany({
+    where: {
+      conversationId: params.id,
+      senderId: { not: user.id },
+      readAt: null,
+    },
+    data: { readAt: new Date() },
+  });
+
   return NextResponse.json({ messages });
 }
 

@@ -9,6 +9,7 @@ type Message = {
   imageUrl?: string | null;
   senderId: string;
   createdAt: string;
+  readAt?: string | null;
   sender: { fullName: string };
 };
 
@@ -108,7 +109,7 @@ export default function ConversationThread({
                 )}
                 {m.content && <span>{m.content}</span>}
                 <div
-                  className={`mt-1 text-[10px] ${
+                  className={`mt-1 flex items-center gap-1 text-[10px] ${
                     isMine ? "text-blue-100" : "text-gray-400"
                   }`}
                 >
@@ -116,6 +117,11 @@ export default function ConversationThread({
                     hour: "2-digit",
                     minute: "2-digit",
                   })}
+                  {isMine && (
+                    <span className={m.readAt ? "text-blue-300" : ""}>
+                      {m.readAt ? "✓✓" : "✓"}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
