@@ -45,6 +45,15 @@ export default async function ProfilePage({
     ? JSON.parse(profileUser.freelanceProfile.skills)
     : [];
 
+  const reviews = profileUser.freelanceProfile
+    ? await prisma.review.findMany({
+        where: { targetUserId: profileUser.id },
+        include: { reviewer: true },
+        orderBy: { createdAt: "desc" },
+        take: 20,
+      })
+    : [];
+
   return (
     <div className="mx-auto max-w-3xl px-4 pb-12">
       {/* Couverture + avatar en overlay */}
@@ -201,6 +210,48 @@ export default async function ProfilePage({
           </div>
         </section>
 
+      )}
+
+      {/* Avis reçus */}
+      {profileUser.freelanceProfile && reviews.length > 0 && (
+        <section className="mt-6">
+          <h2 className="font-semibold text-gray-900">
+            Avis ({reviews.length})
+          </h2>
+          <div className="mt-3 space-y-3">
+            {reviews.map((r: any) => (
+              <div key={r.id} className="rounded-lg border bg-white p-4">
+                <div className="flex items-center justify-between">
+                  <Link
+                    href={`/profile/${r.reviewer.id}`}
+                    className="text-sm font-medium text-gray-900 hover:underline"
+                  >
+                    {r.reviewer.fullName}
+                  </Link>
+                  <span className="text-xs text-gray-400">
+                    {new Date(r.createdAt).toLocaleDateString("fr-FR")}
+                  </span>
+                </div>
+                <div className="mt-1 flex items-center gap-0.5">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <Star
+                      key={n}
+                      size={13}
+                      className={
+                        n <= r.rating
+                          ? "fill-amber-400 text-amber-400"
+                          : "text-gray-200"
+                      }
+                    />
+                  ))}
+                </div>
+                {r.comment && (
+                  <p className="mt-1 text-sm text-gray-700">{r.comment}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* Produits en vente */}

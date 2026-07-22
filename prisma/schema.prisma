@@ -201,6 +201,8 @@ model Review {
   mission    Mission? @relation(fields: [missionId], references: [id])
   reviewer   User     @relation("ReviewAuthor", fields: [reviewerId], references: [id])
   targetUser User     @relation("ReviewTarget", fields: [targetUserId], references: [id])
+
+  @@unique([missionId, reviewerId, targetUserId])
 }
 
 // ============================================================

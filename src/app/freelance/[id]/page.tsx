@@ -6,6 +6,8 @@ import OfferForm from "@/components/OfferForm";
 import AcceptOfferButton from "@/components/AcceptOfferButton";
 import MessageSellerButton from "@/components/MessageSellerButton";
 import DeleteMissionButton from "@/components/DeleteMissionButton";
+import CompleteMissionButton from "@/components/CompleteMissionButton";
+import ReviewForm from "@/components/ReviewForm";
 import { MapPin, Star, CheckCircle2 } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -30,6 +32,7 @@ export default async function MissionDetailPage({
         include: { freelance: { include: { user: true } } },
         orderBy: { price: "asc" },
       },
+      reviews: true,
     },
   });
 
@@ -38,6 +41,13 @@ export default async function MissionDetailPage({
   const currentUser = await getCurrentUser();
   const isClient = currentUser?.id === mission.clientId;
   const isFreelance = !!currentUser?.freelanceProfile;
+
+  const acceptedOffer = mission.offers.find((o: any) => o.status === "acceptee");
+  const isAcceptedFreelance =
+    !!currentUser && acceptedOffer?.freelance.userId === currentUser.id;
+  const myReview = currentUser
+    ? mission.reviews.find((r: any) => r.reviewerId === currentUser.id)
+    : undefined;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -164,6 +174,65 @@ export default async function MissionDetailPage({
           )}
         </div>
       </div>
+
+      {/* Statut de la mission + actions liées */}
+      {mission.status === "attribuee" && isClient && (
+        <div className="mt-6 rounded-lg border border-green-200 bg-green-50 p-4">
+          <p className="text-sm text-green-800">
+            Cette mission a été attribuée. Une fois le travail terminé, marque-la
+            comme terminée pour pouvoir laisser un avis.
+          </p>
+          <div className="mt-3">
+            <CompleteMissionButton missionId={mission.id} />
+          </div>
+        </div>
+      )}
+
+      {mission.status === "terminee" && (
+        <div className="mt-8">
+          <h2 className="flex items-center gap-2 font-semibold text-gray-900">
+            <CheckCircle2 size={18} className="text-green-600" /> Mission terminée
+          </h2>
+
+          <div className="mt-3 space-y-3">
+            {mission.reviews.map((r: any) => (
+              <div key={r.id} className="rounded-lg border bg-white p-4">
+                <div className="flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <Star
+                      key={n}
+                      size={14}
+                      className={
+                        n <= r.rating
+                          ? "fill-amber-400 text-amber-400"
+                          : "text-gray-200"
+                      }
+                    />
+                  ))}
+                </div>
+                {r.comment && (
+                  <p className="mt-1 text-sm text-gray-700">{r.comment}</p>
+                )}
+              </div>
+            ))}
+
+            {isClient && acceptedOffer && !myReview && (
+              <ReviewForm
+                missionId={mission.id}
+                targetUserId={acceptedOffer.freelance.userId}
+                targetName={acceptedOffer.freelance.user.fullName}
+              />
+            )}
+            {isAcceptedFreelance && !myReview && (
+              <ReviewForm
+                missionId={mission.id}
+                targetUserId={mission.clientId}
+                targetName={mission.client.fullName}
+              />
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
