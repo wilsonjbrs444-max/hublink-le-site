@@ -86,9 +86,14 @@ export default async function ProfilePage({
             <MapPin size={13} /> {profileUser.city || "Ville non précisée"}
           </p>
           <p className="mt-1 text-sm text-gray-600">
-            <span className="font-semibold">{profileUser._count.followers}</span> abonnés ·{" "}
-            <span className="font-semibold">{profileUser._count.following}</span> abonnements
-          </p>
+  <Link href={`/profile/${profileUser.id}/followers`} className="hover:underline">
+    <span className="font-semibold">{profileUser._count.followers}</span> abonnés
+  </Link>{" "}
+  ·{" "}
+  <Link href={`/profile/${profileUser.id}/following`} className="hover:underline">
+    <span className="font-semibold">{profileUser._count.following}</span> abonnements
+  </Link>
+</p>
         </div>
 
         {isOwnProfile && (
