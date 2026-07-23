@@ -44,6 +44,22 @@ export default function ConversationThread({
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length]);
 
+  // Rafraîchissement automatique : va chercher les nouveaux messages
+  // toutes les 3 secondes, comme pour les parties en duel.
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`/api/conversations/${conversationId}/messages`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data.messages) setMessages(data.messages);
+      } catch {
+        // silencieux : on réessaiera au prochain cycle
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [conversationId]);
+
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
