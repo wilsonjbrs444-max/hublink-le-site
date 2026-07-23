@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, Users } from "lucide-react";
 
 const GAMES = [
+  { href: "/games/ludo", emoji: "🎲", name: "Ludo", duo: true },
   { href: "/games/morpion", emoji: "❌⭕", name: "Morpion", duo: true },
   { href: "/games/puissance4", emoji: "🔴🟡", name: "Puissance 4", duo: true },
   { href: "/games/rps", emoji: "🪨📄✂️", name: "Pierre-Papier-Ciseaux", duo: true },

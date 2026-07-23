@@ -411,6 +411,16 @@ model Favorite {
   @@unique([userId, targetType, targetId])
 }
 
+model LudoGame {
+  id        String   @id @default(uuid())
+  seats     String   // JSON: liste de sièges {color, type, userId, name}
+  state     String   // JSON: pions, tour, dé, gagnant
+  status    String   @default("waiting") // waiting / active / finished
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model GameSession {
   id        String   @id @default(uuid())
   gameType  String   // "morpion" | "puissance4" | "rps"
