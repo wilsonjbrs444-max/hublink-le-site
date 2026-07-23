@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { X, Copy, Check } from "lucide-react";
 
@@ -22,12 +22,15 @@ export default function PlayFriendModal({
   const router = useRouter();
 
   async function loadFriends() {
-    if (friends) return;
     const res = await fetch("/api/games/friends");
     const data = await res.json();
     setFriends(data.friends || []);
   }
-  loadFriends();
+
+  useEffect(() => {
+    loadFriends();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function challenge(opponentUserId?: string) {
     setLoading(true);
