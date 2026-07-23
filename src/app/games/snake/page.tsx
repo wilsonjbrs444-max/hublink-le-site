@@ -43,6 +43,8 @@ export default function SnakePage() {
 
   useEffect(() => {
     if (!running || gameOver) return;
+    // La vitesse augmente progressivement avec le score (démarre lent, accélère)
+    const speed = Math.max(220 - score * 6, 90);
     const interval = setInterval(() => {
       setSnake((prev) => {
         const head = { x: prev[0].x + dirRef.current.x, y: prev[0].y + dirRef.current.y };
@@ -64,9 +66,9 @@ export default function SnakePage() {
         }
         return next;
       });
-    }, 160);
+    }, speed);
     return () => clearInterval(interval);
-  }, [running, gameOver, food]);
+  }, [running, gameOver, food, score]);
 
   function reset() {
     setSnake([{ x: 7, y: 7 }]);

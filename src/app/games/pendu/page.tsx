@@ -2,23 +2,20 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-
-const WORDS = [
-  "ORDINATEUR", "RESEAU", "CAMEROUN", "TECHNICIEN", "SERVEUR",
-  "CLAVIER", "IMPRIMANTE", "LOGICIEL", "CYBERSECURITE", "INTERNET",
-  "TELEPHONE", "MARKETPLACE", "FREELANCE", "INNOVATION", "DOUALA",
-];
-
-const ALPHABET = "AZERTYUIOPQSDFGHJKLMWXCVBN".split("");
-const MAX_ERRORS = 7;
+import { ArrowLeft, Users } from "lucide-react";
+import PlayFriendModal from "@/components/games/PlayFriendModal";
+import GameRules from "@/components/games/GameRules";
+import { PENDU_WORDS, PENDU_ALPHABET, PENDU_MAX_ERRORS } from "@/lib/games/pendu";
 
 export default function PenduPage() {
-  const [word, setWord] = useState(() => WORDS[Math.floor(Math.random() * WORDS.length)]);
+  const [word, setWord] = useState(
+    () => PENDU_WORDS[Math.floor(Math.random() * PENDU_WORDS.length)]
+  );
   const [guessed, setGuessed] = useState<string[]>([]);
+  const [showFriendModal, setShowFriendModal] = useState(false);
 
   const errors = guessed.filter((l) => !word.includes(l)).length;
-  const lost = errors >= MAX_ERRORS;
+  const lost = errors >= PENDU_MAX_ERRORS;
   const won = word.split("").every((l) => guessed.includes(l));
 
   function guess(letter: string) {
@@ -27,7 +24,7 @@ export default function PenduPage() {
   }
 
   function reset() {
-    setWord(WORDS[Math.floor(Math.random() * WORDS.length)]);
+    setWord(PENDU_WORDS[Math.floor(Math.random() * PENDU_WORDS.length)]);
     setGuessed([]);
   }
 
@@ -38,8 +35,16 @@ export default function PenduPage() {
       </Link>
       <h1 className="mt-3 text-xl font-bold">🎯 Pendu</h1>
       <p className="mt-1 text-sm text-gray-500">
-        {MAX_ERRORS - errors} essai(s) restant(s)
+        {PENDU_MAX_ERRORS - errors} essai(s) restant(s)
       </p>
+
+      <GameRules
+        rules={[
+          "En solo : un mot aléatoire est choisi, devine-le lettre par lettre.",
+          "En duo : c'est toi (celui qui invite) qui choisis le mot secret, ton ami doit le deviner.",
+          "Ton ami gagne s'il trouve le mot avant d'épuiser ses essais, sinon tu gagnes.",
+        ]}
+      />
 
       <p className="mt-6 text-3xl font-bold tracking-widest text-gray-800">
         {word
@@ -52,7 +57,7 @@ export default function PenduPage() {
       {lost && <p className="mt-4 font-semibold text-red-600">😅 Perdu ! Le mot était {word}.</p>}
 
       <div className="mx-auto mt-6 grid max-w-xs grid-cols-7 gap-1.5">
-        {ALPHABET.map((l) => {
+        {PENDU_ALPHABET.map((l) => {
           const used = guessed.includes(l);
           const correct = used && word.includes(l);
           return (
@@ -74,12 +79,28 @@ export default function PenduPage() {
         })}
       </div>
 
-      <button
-        onClick={reset}
-        className="mt-6 rounded-md border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-      >
-        Nouveau mot
-      </button>
+      <div className="mt-6 flex flex-col gap-2">
+        <button
+          onClick={reset}
+          className="rounded-md border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+        >
+          Nouveau mot
+        </button>
+        <button
+          onClick={() => setShowFriendModal(true)}
+          className="flex items-center justify-center gap-2 rounded-md bg-hublink px-4 py-2 text-sm font-semibold text-white hover:bg-hublink-dark"
+        >
+          <Users size={16} /> Défier un ami (tu choisis le mot)
+        </button>
+      </div>
+
+      {showFriendModal && (
+        <PlayFriendModal
+          gameType="pendu"
+          initialState={{ phase: "setting_word", word: null, guessed: [] }}
+          onClose={() => setShowFriendModal(false)}
+        />
+      )}
     </div>
   );
 }

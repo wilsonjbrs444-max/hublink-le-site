@@ -2,35 +2,41 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users } from "lucide-react";
+import PlayFriendModal from "@/components/games/PlayFriendModal";
+import GameRules from "@/components/games/GameRules";
+import { QUIZ_QUESTIONS } from "@/lib/games/quizQuestions";
 
-const QUESTIONS = [
-  { q: "Quelle est la capitale économique du Cameroun ?", options: ["Yaoundé", "Douala", "Garoua", "Bafoussam"], answer: 1 },
-  { q: "Que signifie « HTTP » ?", options: ["HyperText Transfer Protocol", "High Tech Transfer Point", "Home Tool Transfer Program", "Hyperlink Text Tool Process"], answer: 0 },
-  { q: "Combien y a-t-il de Go dans 1 To ?", options: ["100", "1000", "10000", "10"], answer: 1 },
-  { q: "Quel langage est utilisé pour structurer une page web ?", options: ["CSS", "Python", "HTML", "SQL"], answer: 2 },
-  { q: "Quelle entreprise a créé le langage JavaScript ?", options: ["Microsoft", "Netscape", "Google", "Apple"], answer: 1 },
-  { q: "Quel est le plus long fleuve du Cameroun ?", options: ["Le Nil", "La Sanaga", "Le Congo", "Le Niger"], answer: 1 },
-  { q: "Que veut dire « Wi-Fi » à l'origine ?", options: ["Wireless Fidelity", "Wire Free", "Wide Field", "Web Finder"], answer: 0 },
-  { q: "Quel est le format d'image le plus compressé ?", options: ["BMP", "PNG", "JPEG", "TIFF"], answer: 2 },
-  { q: "En quelle année le Cameroun a-t-il obtenu son indépendance ?", options: ["1958", "1960", "1962", "1965"], answer: 1 },
-  { q: "Quel composant est le « cerveau » d'un ordinateur ?", options: ["RAM", "Disque dur", "CPU", "Carte graphique"], answer: 2 },
-];
+const ROUND_SIZE = 15;
+const DUEL_ROUND_SIZE = 10;
+
+function pickQuestions() {
+  const shuffled = [...QUIZ_QUESTIONS].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, ROUND_SIZE);
+}
+
+function randomOrder() {
+  return Array.from({ length: QUIZ_QUESTIONS.length }, (_, i) => i)
+    .sort(() => Math.random() - 0.5)
+    .slice(0, DUEL_ROUND_SIZE);
+}
 
 export default function QuizPage() {
+  const [questions, setQuestions] = useState(pickQuestions);
   const [index, setIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [finished, setFinished] = useState(false);
+  const [showFriendModal, setShowFriendModal] = useState(false);
 
-  const current = QUESTIONS[index];
+  const current = questions[index];
 
   function answer(i: number) {
     if (selected !== null) return;
     setSelected(i);
     if (i === current.answer) setScore((s) => s + 1);
     setTimeout(() => {
-      if (index + 1 < QUESTIONS.length) {
+      if (index + 1 < questions.length) {
         setIndex((idx) => idx + 1);
         setSelected(null);
       } else {
@@ -40,6 +46,7 @@ export default function QuizPage() {
   }
 
   function reset() {
+    setQuestions(pickQuestions());
     setIndex(0);
     setScore(0);
     setSelected(null);
@@ -52,11 +59,23 @@ export default function QuizPage() {
         <ArrowLeft size={15} /> Retour aux jeux
       </Link>
       <h1 className="mt-3 text-xl font-bold">🧠 Quiz</h1>
+      <p className="mt-1 text-xs text-gray-400">
+        {QUIZ_QUESTIONS.length} questions dans la banque · {ROUND_SIZE} par partie
+      </p>
+
+      <GameRules
+        rules={[
+          "En solo : réponds à 15 questions tirées au hasard, ton score s'affiche à la fin.",
+          "En duo : les deux joueurs voient la même question en même temps, le premier qui répond correctement marque le point.",
+          "Après chaque question, on passe directement à la suivante.",
+          "Celui qui a le plus de points après 10 questions gagne le duel.",
+        ]}
+      />
 
       {!finished ? (
         <>
-          <p className="mt-1 text-sm text-gray-500">
-            Question {index + 1} / {QUESTIONS.length} · Score : {score}
+          <p className="mt-4 text-sm text-gray-500">
+            Question {index + 1} / {questions.length} · Score : {score}
           </p>
           <p className="mt-6 text-base font-semibold text-gray-800">{current.q}</p>
           <div className="mt-4 space-y-2">
@@ -85,7 +104,7 @@ export default function QuizPage() {
       ) : (
         <>
           <p className="mt-6 text-lg font-semibold text-hublink">
-            Score final : {score} / {QUESTIONS.length}
+            Score final : {score} / {questions.length}
           </p>
           <button
             onClick={reset}
@@ -94,6 +113,21 @@ export default function QuizPage() {
             Rejouer
           </button>
         </>
+      )}
+
+      <button
+        onClick={() => setShowFriendModal(true)}
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-md border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+      >
+        <Users size={16} /> Défier un ami (duel de rapidité)
+      </button>
+
+      {showFriendModal && (
+        <PlayFriendModal
+          gameType="quiz"
+          initialState={{ order: randomOrder(), index: 0, scores: {} }}
+          onClose={() => setShowFriendModal(false)}
+        />
       )}
     </div>
   );

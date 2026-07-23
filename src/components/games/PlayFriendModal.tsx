@@ -8,9 +8,11 @@ type Friend = { id: string; fullName: string; avatarUrl: string | null };
 
 export default function PlayFriendModal({
   gameType,
+  initialState,
   onClose,
 }: {
   gameType: string;
+  initialState?: any;
   onClose: () => void;
 }) {
   const [friends, setFriends] = useState<Friend[] | null>(null);
@@ -33,7 +35,7 @@ export default function PlayFriendModal({
       const res = await fetch("/api/games/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ gameType, opponentUserId }),
+        body: JSON.stringify({ gameType, opponentUserId, initialState }),
       });
       const data = await res.json();
       if (!res.ok) {

@@ -8,6 +8,9 @@ const GAME_LABELS: Record<string, string> = {
   morpion: "Morpion",
   puissance4: "Puissance 4",
   rps: "Pierre-Papier-Ciseaux",
+  quiz: "Quiz",
+  memory: "Memory",
+  pendu: "Pendu",
 };
 
 export async function POST(req: NextRequest) {

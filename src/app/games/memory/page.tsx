@@ -2,26 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-
-const EMOJIS = ["🍎", "🍌", "🍇", "🍉", "🍒", "🥝", "🍍", "🍑"];
-
-function shuffledDeck() {
-  const deck = [...EMOJIS, ...EMOJIS].map((e, i) => ({ id: i, emoji: e }));
-  for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
-  }
-  return deck;
-}
+import { ArrowLeft, Users } from "lucide-react";
+import PlayFriendModal from "@/components/games/PlayFriendModal";
+import GameRules from "@/components/games/GameRules";
+import { shuffledMemoryDeck } from "@/lib/games/memory";
 
 export default function MemoryPage() {
-  const [deck, setDeck] = useState(shuffledDeck());
+  const [deck, setDeck] = useState(shuffledMemoryDeck);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   const [moves, setMoves] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [running, setRunning] = useState(true);
+  const [showFriendModal, setShowFriendModal] = useState(false);
 
   useEffect(() => {
     if (!running) return;
@@ -50,7 +43,7 @@ export default function MemoryPage() {
   }
 
   function reset() {
-    setDeck(shuffledDeck());
+    setDeck(shuffledMemoryDeck());
     setFlipped([]);
     setMatched([]);
     setMoves(0);
@@ -69,6 +62,14 @@ export default function MemoryPage() {
       <p className="mt-1 text-sm text-gray-500">
         {moves} coups · {seconds}s
       </p>
+
+      <GameRules
+        rules={[
+          "En solo : retrouve toutes les paires en un minimum de coups.",
+          "En duo : vous jouez à tour de rôle. Si tu trouves une paire, tu rejoues. Sinon, c'est au tour de l'autre.",
+          "Celui qui a trouvé le plus de paires à la fin gagne le duel.",
+        ]}
+      />
 
       {won && <p className="mt-2 font-semibold text-hublink">🎉 Terminé en {moves} coups !</p>}
 
@@ -89,12 +90,28 @@ export default function MemoryPage() {
         })}
       </div>
 
-      <button
-        onClick={reset}
-        className="mt-6 rounded-md border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-      >
-        Recommencer
-      </button>
+      <div className="mt-6 flex flex-col gap-2">
+        <button
+          onClick={reset}
+          className="rounded-md border px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+        >
+          Recommencer
+        </button>
+        <button
+          onClick={() => setShowFriendModal(true)}
+          className="flex items-center justify-center gap-2 rounded-md bg-hublink px-4 py-2 text-sm font-semibold text-white hover:bg-hublink-dark"
+        >
+          <Users size={16} /> Jouer avec un ami
+        </button>
+      </div>
+
+      {showFriendModal && (
+        <PlayFriendModal
+          gameType="memory"
+          initialState={{ deck: shuffledMemoryDeck(), matched: [], scores: {} }}
+          onClose={() => setShowFriendModal(false)}
+        />
+      )}
     </div>
   );
 }
