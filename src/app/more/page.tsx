@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Wrench, Settings, LayoutDashboard, User as UserIcon, Heart } from "lucide-react";
+import { Wrench, Settings, LayoutDashboard, User as UserIcon, Heart, Gamepad2 } from "lucide-react";
 import { getCurrentUser } from "@/lib/currentUser";
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export default async function MorePage() {
     { href: "/favorites", label: "Mes favoris", Icon: Heart },
     { href: "/services", label: "Services", Icon: Wrench },
     { href: "/dashboard", label: "Tableau de bord", Icon: LayoutDashboard },
+    { href: "/games", label: "Jeux", Icon: Gamepad2 },
     { href: "/settings", label: "Paramètres", Icon: Settings },
   ];
 

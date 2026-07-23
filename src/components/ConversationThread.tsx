@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MoreVertical } from "lucide-react";
+import Link from "next/link";
+import { MoreVertical, Gamepad2 } from "lucide-react";
 
 type Message = {
   id: string;
@@ -13,6 +14,12 @@ type Message = {
   deletedForEveryone?: boolean;
   sender: { fullName: string };
 };
+
+function extractGameLink(content: string): { text: string; link: string | null } {
+  const match = content.match(/\/games\/[a-z0-9]+\/[a-zA-Z0-9-]+/);
+  if (!match) return { text: content, link: null };
+  return { text: content.replace(match[0], "").trim(), link: match[0] };
+}
 
 export default function ConversationThread({
   conversationId,
@@ -159,7 +166,26 @@ export default function ConversationThread({
                           />
                         </a>
                       )}
-                      {m.content && <span>{m.content}</span>}
+                      {m.content && (() => {
+                        const { text, link } = extractGameLink(m.content);
+                        return (
+                          <>
+                            {text && <span>{text}</span>}
+                            {link && (
+                              <Link
+                                href={link}
+                                className={`mt-1 flex items-center justify-center gap-2 rounded-md py-2 text-sm font-semibold ${
+                                  isMine
+                                    ? "bg-white/20 text-white hover:bg-white/30"
+                                    : "bg-hublink text-white hover:bg-hublink-dark"
+                                }`}
+                              >
+                                <Gamepad2 size={16} /> Rejoindre la partie
+                              </Link>
+                            )}
+                          </>
+                        );
+                      })()}
                     </>
                   )}
                   <div

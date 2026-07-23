@@ -47,6 +47,8 @@ model User {
   pushSubscriptions PushSubscription[]
   messageDeletions  MessageDeletion[]
   favorites         Favorite[]
+  gamesAsPlayer1    GameSession[] @relation("GamePlayer1")
+  gamesAsPlayer2    GameSession[] @relation("GamePlayer2")
 }
 
 model UserRole {
@@ -407,4 +409,20 @@ model Favorite {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, targetType, targetId])
+}
+
+model GameSession {
+  id        String   @id @default(uuid())
+  gameType  String   // "morpion" | "puissance4" | "rps"
+  player1Id String
+  player2Id String?
+  state     String   // état du jeu en JSON
+  status    String   @default("waiting") // waiting / active / finished
+  turnId    String?  // id de l'utilisateur dont c'est le tour
+  winnerId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  player1 User  @relation("GamePlayer1", fields: [player1Id], references: [id], onDelete: Cascade)
+  player2 User? @relation("GamePlayer2", fields: [player2Id], references: [id], onDelete: Cascade)
 }
