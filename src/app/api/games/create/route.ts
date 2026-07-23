@@ -11,6 +11,9 @@ const GAME_LABELS: Record<string, string> = {
   quiz: "Quiz",
   memory: "Memory",
   pendu: "Pendu",
+  dames: "Dames",
+  "tape-taupe": "Tape-la-taupe",
+  reaction: "Réaction rapide",
 };
 
 export async function POST(req: NextRequest) {

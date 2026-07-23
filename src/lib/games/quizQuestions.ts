@@ -100,4 +100,63 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
   { q: "Quel est le plus grand organe du corps humain ?", options: ["Le foie", "Le cerveau", "La peau", "Le cœur"], answer: 2, category: "Sciences" },
   { q: "Quelle ville abrite la Tour Eiffel ?", options: ["Lyon", "Marseille", "Paris", "Nice"], answer: 2, category: "Culture générale" },
   { q: "Combien de cordes a une guitare classique ?", options: ["4", "5", "6", "7"], answer: 2, category: "Culture générale" },
+
+  // --- Cinéma / Musique ---
+  { q: "Quel film a remporté le plus d'Oscars ?", options: ["Titanic", "Ben-Hur", "Le Seigneur des Anneaux : Le Retour du Roi", "Les 3 ex-aequo ci-dessus"], answer: 3, category: "Cinéma" },
+  { q: "Qui a composé « La Symphonie n°9 » malgré sa surdité ?", options: ["Mozart", "Beethoven", "Bach", "Chopin"], answer: 1, category: "Musique" },
+  { q: "Quel est le plus grand festival de musique au monde par affluence ?", options: ["Coachella", "Tomorrowland", "Glastonbury", "Rock in Rio"], answer: 3, category: "Musique" },
+  { q: "Quel acteur a joué Iron Man au cinéma ?", options: ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"], answer: 1, category: "Cinéma" },
+  { q: "Quel est le style musical né à la Jamaïque ?", options: ["Le Blues", "Le Reggae", "Le Jazz", "Le Funk"], answer: 1, category: "Musique" },
+  { q: "Quel studio a produit « Le Roi Lion » (1994) ?", options: ["Pixar", "DreamWorks", "Disney", "Universal"], answer: 2, category: "Cinéma" },
+
+  // --- Cuisine ---
+  { q: "Quel ingrédient principal compose le guacamole ?", options: ["Tomate", "Avocat", "Poivron", "Oignon"], answer: 1, category: "Cuisine" },
+  { q: "Quelle épice provient du safran ?", options: ["Une fleur", "Une racine", "Une écorce", "Une graine"], answer: 0, category: "Cuisine" },
+  { q: "Quel pays est à l'origine de la pizza ?", options: ["France", "Espagne", "Italie", "Grèce"], answer: 2, category: "Cuisine" },
+  { q: "Quelle boisson est obtenue par fermentation du raisin ?", options: ["La bière", "Le vin", "Le cidre", "Le rhum"], answer: 1, category: "Cuisine" },
+  { q: "Quel plat camerounais est à base de manioc fermenté ?", options: ["Le Ndolé", "Le Bâton de manioc", "Le Poulet DG", "L'Achu"], answer: 1, category: "Cameroun" },
+
+  // --- Encore Sciences / Nature ---
+  { q: "Quel animal est le plus rapide sur terre ?", options: ["Le lion", "Le guépard", "L'antilope", "Le cheval"], answer: 1, category: "Sciences" },
+  { q: "Quelle planète possède le plus grand nombre de lunes connues ?", options: ["Terre", "Mars", "Jupiter", "Vénus"], answer: 2, category: "Sciences" },
+  { q: "Combien de chambres compte le cœur humain ?", options: ["2", "3", "4", "5"], answer: 2, category: "Sciences" },
+  { q: "Quel gaz représente environ 78% de l'atmosphère terrestre ?", options: ["Oxygène", "Azote", "CO2", "Hydrogène"], answer: 1, category: "Sciences" },
+  { q: "Quelle est l'unité de mesure de la force ?", options: ["Le watt", "Le newton", "Le joule", "Le pascal"], answer: 1, category: "Sciences" },
+  { q: "Quel scientifique a formulé la théorie de la relativité ?", options: ["Newton", "Einstein", "Galilée", "Darwin"], answer: 1, category: "Sciences" },
+  { q: "Quelle est la plus grande cellule du corps humain ?", options: ["Le neurone", "L'ovule", "Le globule rouge", "La cellule musculaire"], answer: 1, category: "Sciences" },
+  { q: "Combien de temps dure une rotation complète de la Terre sur elle-même ?", options: ["12 heures", "24 heures", "365 jours", "30 jours"], answer: 1, category: "Sciences" },
+  { q: "Quel est le processus par lequel les plantes produisent de l'énergie ?", options: ["La respiration", "La photosynthèse", "La fermentation", "L'osmose"], answer: 1, category: "Sciences" },
+  { q: "Quel insecte produit le miel ?", options: ["La guêpe", "La fourmi", "L'abeille", "Le papillon"], answer: 2, category: "Sciences" },
+
+  // --- Encore Géographie / Monde ---
+  { q: "Quel pays compte le plus grand nombre d'habitants au monde (2024) ?", options: ["Chine", "Inde", "États-Unis", "Indonésie"], answer: 1, category: "Géographie" },
+  { q: "Quelle est la capitale de l'Espagne ?", options: ["Barcelone", "Madrid", "Séville", "Valence"], answer: 1, category: "Géographie" },
+  { q: "Quel pays a la forme d'une botte sur la carte ?", options: ["Espagne", "Italie", "Grèce", "Portugal"], answer: 1, category: "Géographie" },
+  { q: "Quelle mer borde l'Algérie, la Tunisie et le Maroc au nord ?", options: ["Mer Rouge", "Méditerranée", "Mer Noire", "Mer d'Arabie"], answer: 1, category: "Géographie" },
+  { q: "Quel est le pays le plus peuplé d'Afrique ?", options: ["Éthiopie", "Nigeria", "Égypte", "RDC"], answer: 1, category: "Géographie" },
+  { q: "Quelle ville est surnommée « la Ville Lumière » ?", options: ["Londres", "New York", "Paris", "Rome"], answer: 2, category: "Géographie" },
+  { q: "Quel pays possède le plus de fuseaux horaires ?", options: ["États-Unis", "Russie", "Chine", "Canada"], answer: 1, category: "Géographie" },
+  { q: "Quelle est la plus grande forêt tropicale du monde ?", options: ["La forêt du Congo", "L'Amazonie", "La forêt boréale", "La forêt de Bornéo"], answer: 1, category: "Géographie" },
+
+  // --- Encore Culture générale ---
+  { q: "Quel est le sport national du Japon ?", options: ["Le judo", "Le sumo", "Le karaté", "Le baseball"], answer: 1, category: "Culture générale" },
+  { q: "Quel écrivain a écrit « Une saison en enfer » ?", options: ["Victor Hugo", "Arthur Rimbaud", "Baudelaire", "Verlaine"], answer: 1, category: "Culture générale" },
+  { q: "Quelle est la première chose que Neil Armstrong a dite en marchant sur la Lune (thème) ?", options: ["Un petit pas pour l'homme", "La Terre est bleue", "Nous sommes arrivés", "C'est magnifique"], answer: 0, category: "Culture générale" },
+  { q: "Combien de temps faut-il théoriquement pour faire le tour du monde en avion ?", options: ["24h", "48h", "72h", "96h"], answer: 1, category: "Culture générale" },
+  { q: "Quel est le symbole international de la paix ?", options: ["La colombe", "Le trèfle", "L'étoile", "Le cœur"], answer: 0, category: "Culture générale" },
+  { q: "Quelle fête est célébrée le 25 décembre ?", options: ["Pâques", "Noël", "La Pentecôte", "La Toussaint"], answer: 1, category: "Culture générale" },
+  { q: "Quel est le plus vieux jeu de société encore joué aujourd'hui ?", options: ["Les échecs", "Le go", "Le senet", "Le backgammon"], answer: 2, category: "Culture générale" },
+  { q: "Quelle organisation internationale a son siège à Genève ?", options: ["L'ONU", "L'OMS", "Les deux", "Aucune"], answer: 2, category: "Culture générale" },
+  { q: "Quel pays a inventé le papier ?", options: ["Égypte", "Chine", "Grèce", "Inde"], answer: 1, category: "Culture générale" },
+  { q: "Quelle est la plus ancienne université encore en activité ?", options: ["Oxford", "Sorbonne", "Université Al Quaraouiyine", "Harvard"], answer: 2, category: "Culture générale" },
+  { q: "Quel métal précieux est utilisé pour les médailles d'or olympiques (composition) ?", options: ["Or pur", "Argent doré", "Bronze doré", "Platine"], answer: 1, category: "Sport" },
+  { q: "Combien de temps dure généralement un cycle lunaire ?", options: ["7 jours", "14 jours", "29,5 jours", "60 jours"], answer: 2, category: "Sciences" },
+  { q: "Quel pays a le plus de fuseaux horaires après la Russie ?", options: ["France", "États-Unis", "Chine", "Australie"], answer: 0, category: "Géographie" },
+  { q: "Quelle est la capitale du Ghana ?", options: ["Kumasi", "Accra", "Tamale", "Cape Coast"], answer: 1, category: "Géographie" },
+  { q: "Quelle est la capitale du Sénégal ?", options: ["Thiès", "Dakar", "Saint-Louis", "Touba"], answer: 1, category: "Géographie" },
+  { q: "Quel pays africain n'a jamais été colonisé ?", options: ["Éthiopie", "Kenya", "Ghana", "Sénégal"], answer: 0, category: "Histoire" },
+  { q: "Quelle est la plus ancienne civilisation connue ?", options: ["Égyptienne", "Sumérienne", "Chinoise", "Grecque"], answer: 1, category: "Histoire" },
+  { q: "Qui a peint la Joconde ?", options: ["Michel-Ange", "Léonard de Vinci", "Raphaël", "Donatello"], answer: 1, category: "Culture générale" },
+  { q: "Quelle est la monnaie du Royaume-Uni ?", options: ["L'euro", "La livre sterling", "Le dollar", "Le franc"], answer: 1, category: "Culture générale" },
+  { q: "Quel pays a offert la Statue de la Liberté aux États-Unis ?", options: ["Angleterre", "France", "Espagne", "Italie"], answer: 1, category: "Histoire" },
 ];
